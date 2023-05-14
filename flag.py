@@ -52,8 +52,12 @@ def check_website(url):
         content = url + '에러'
         sendMessageFunc(content)
         
+urls = [
+    "https://cabot.co.kr",
+    "https://cabo.kr",
+    "https://gabot.co.kr"
+]
 
-site_url = "https://cabott.co.kr"
+for url in urls:
 
-
-check_website(site_url)
+    check_website(url)
