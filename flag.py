@@ -1,25 +1,6 @@
 import hashlib, hmac, base64, time
 import requests, json
 
-def check_website(url):
-    try:
-        response = requests.get(url)
-        if response.status_code == 200:
-            pass
-        else:
-            content = url + '에러'
-            sendMessageFunc(content)
-    except requests.exceptions.RequestException as e:
-        content = url + '에러'
-        sendMessageFunc(content)
-        
-
-site_url = "https://cabot.co.kr"
-
-
-check_website(site_url)
-
-
 def sendMessageFunc (content):
 
     def getSigningKey():
@@ -58,3 +39,21 @@ def sendMessageFunc (content):
     }
     
     return requests.post('https://sens.apigw.ntruss.com/sms/v2/services/ncp:sms:kr:289661419957:gabot/messages', json=body, headers=headers)
+
+def check_website(url):
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            pass
+        else:
+            content = url + '에러'
+            sendMessageFunc(content)
+    except requests.exceptions.RequestException as e:
+        content = url + '에러'
+        sendMessageFunc(content)
+        
+
+site_url = "https://cabott.co.kr"
+
+
+check_website(site_url)
