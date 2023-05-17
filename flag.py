@@ -1,5 +1,7 @@
 import hashlib, hmac, base64, time
 import requests, json
+import traceback
+import datetime
 
 def sendMessageFunc (content):
 
@@ -40,22 +42,47 @@ def sendMessageFunc (content):
     
     return requests.post('https://sens.apigw.ntruss.com/sms/v2/services/ncp:sms:kr:289661419957:gabot/messages', json=body, headers=headers)
 
+def save_error_log(error_message):
+    try:
+        log_file_path = "error_log.txt"
+
+        current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+
+        error_log = f"Time: {current_time}\n"
+        error_log += f"Error Message: {error_message}\n"
+        error_log += traceback.format_exc()
+
+        with open(log_file_path, "a") as file:
+            file.write(error_log)
+            file.write("\n\n\n")
+
+    except Exception as e:
+        pass
+
+
+
 def check_website(url):
+
     try:
         response = requests.get(url)
+
         if response.status_code == 200:
             pass
         else:
-            content = url + '에러'
+            content = url + ': 사이트 에러 로그확인'
             sendMessageFunc(content)
-    except requests.exceptions.RequestException as e:
-        content = url + '에러'
+            save_error_log(response.content)    
+
+    except requests.exceptions.RequestException as erra:
+        content = url + ': 익셉션 에러 로그확인'
         sendMessageFunc(content)
-        
+        save_error_log("AnyException : " + str(erra))
+
 urls = [
     "https://cabot.co.kr",
     "https://cabo.kr",
-    "https://gabot.co.kr"
+    "https://gabot.co.kr",
 ]
 
 for url in urls:
